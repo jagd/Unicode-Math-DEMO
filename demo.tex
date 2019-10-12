@@ -1,0 +1,104 @@
+\documentclass[a5paper]{scrartcl}%
+
+\usepackage{iftex}%
+\ifPDFTeX%
+  \usepackage{stix2}
+\else%
+  \usepackage{fontspec}%
+  \usepackage{unicode-math}%
+  \setmainfont{STIX Two Text}%
+  \unimathsetup{math-style=TeX}
+\fi
+
+\newcommand{\testmath}[1]{%
+  $\mathrm{#1}$   &
+  $\mathit{#1}$   &
+  $\mathbf{#1}$   &
+  $\mathbfit{#1}$ &
+  $\mathsf{#1}$   &
+  $\mathsfit{#1}$ &
+  $\mathbfsf{#1}$ &
+  $\mathbfsfit{#1}$
+}%
+
+\newcommand{\testsym}[1]{%
+  $\symup{#1}$   &
+  $\symit{#1}$   &
+  $\symbfup{#1}$   &
+  $\symbfit{#1}$ &
+  $\symsfup{#1}$   &
+  $\symsfit{#1}$   &
+  $\symbfsf{#1}$   &
+  $\symbfsfit{#1}$
+}%
+
+\newcommand{\testcase}[1]{%
+\ifcsname setmathfont\endcsname%
+\testsym{#1}%
+\else%
+\testmath{#1}%
+\fi%
+}
+
+\newcommand{\testothers}[1]{%
+  $\symbb{#1}$     &
+  $\symbbit{#1}$   &
+  $\symscr{#1}$    &
+  $\symbfscr{#1}$  &
+  $\symcal{#1}$    &
+  $\symbfcal{#1}$  &
+  $\symfrak{#1}$   &
+  $\symbffrak{#1}$ &
+  $\symtt{#1}$
+}%
+
+\newcommand{\testfont}[1]{%
+\ifcsname setmathfont\endcsname%
+  \section{#1}%
+  \setmathfont{#1}%
+\fi
+\centering%
+\begin{tabular}{cccc|cccc}
+  up   &
+  it   &
+  bfup &
+  bfit &
+  sans up   &
+  sans it   &
+  sans bfup &
+  sans bfit
+  %
+  \\\testcase{\sigma}
+  \\\testcase{a}
+\end{tabular}
+
+\ifcsname setmathfont\endcsname%
+\vspace{32pt}
+\begin{tabular}{ccccccccc}
+  bb   & bbit  &
+  scr  & bfscr &
+  cal  & bfcal &
+  frak & bffrak &
+  tt
+  \\\testothers{\sigma}
+  \\\testothers{\Sigma}
+  \\\testothers{a}
+  \\\testothers{A}
+\end{tabular}
+\fi%
+\clearpage
+}
+
+\begin{document}
+\testfont{STIX Two Math}
+\ifcsname setmathfont\endcsname%
+\testfont{Asana Math}
+\testfont{TeX Gyre Bonum Math}
+\testfont{TeX Gyre Pagella Math}
+\testfont{TeX Gyre Schola Math}
+\testfont{TeX Gyre Termes Math}
+\testfont{Latin Modern Math}
+\testfont{DejaVu Math TeX Gyre}
+\testfont{Cambria Math}
+\fi
+\end{document}
