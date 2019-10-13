@@ -1,4 +1,5 @@
 \documentclass[a5paper]{scrartcl}%
+\usepackage{hyperref}
 
 \usepackage{iftex}%
 \ifPDFTeX%
@@ -10,7 +11,7 @@
   \unimathsetup{math-style=TeX}
 \fi
 
-\newcommand{\testmath}[1]{%
+\newcommand{\rowofstandardstylesmath}[1]{%
   $\mathrm{#1}$   &
   $\mathit{#1}$   &
   $\mathbf{#1}$   &
@@ -19,9 +20,10 @@
   $\mathsfit{#1}$ &
   $\mathbfsf{#1}$ &
   $\mathbfsfit{#1}$
-}%
+}
 
-\newcommand{\testsym}[1]{%
+\newcommand{\rowofstandardstyles}[1]{%
+\ifcsname setmathfont\endcsname%
   $\symup{#1}$   &
   $\symit{#1}$   &
   $\symbfup{#1}$   &
@@ -30,17 +32,25 @@
   $\symsfit{#1}$   &
   $\symbfsf{#1}$   &
   $\symbfsfit{#1}$
-}%
-
-\newcommand{\testcase}[1]{%
-\ifcsname setmathfont\endcsname%
-\testsym{#1}%
 \else%
-\testmath{#1}%
+  \rowofstandardstylesmath{#1}
 \fi%
 }
 
-\newcommand{\testothers}[1]{%
+\newcommand{\rowofotherstylesmath}[1]{%
+  $\mathbb{#1}$     &
+                    &
+  $\mathscr{#1}$    &
+  $\mathbfscr{#1}$  &
+  $\mathcal{#1}$    &
+                    &
+  $\mathfrak{#1}$   &
+% $\mathbffrak{#1}$ & % LaTeX Error: Too many math alphabets used in version normal.
+  $\mathtt{#1}$
+}
+
+\newcommand{\rowofotherstyles}[1]{%
+\ifcsname setmathfont\endcsname%
   $\symbb{#1}$     &
   $\symbbit{#1}$   &
   $\symscr{#1}$    &
@@ -50,14 +60,38 @@
   $\symfrak{#1}$   &
   $\symbffrak{#1}$ &
   $\symtt{#1}$
+\else%
+  \rowofotherstylesmath{#1}
+\fi%
 }%
 
-\newcommand{\testfont}[1]{%
+% Test Strings
+% missing \varKappa \varRho
+\newcommand{\tsi}{abcdefghijklmnopqrstuvwxyz}
+\newcommand{\tsii}{ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabla\imath\jmath}
+\newcommand{\tsiii}{\alpha\beta\gamma\delta\epsilon\zeta\eta\theta\vartheta\iota\kappa\varkappa\lambda\mu\nu\xi\omicron\pi\varpi\rho\varrho\sigma\varsigma\tau\upsilon\phi\varphi\chi\psi\omega}
+\newcommand{\tsiv}{\Alpha\Beta\Gamma\Delta\Epsilon\Zeta\Eta\Theta\varTheta\Iota\Kappa\Lambda\Mu\Nu\Xi\Omicron\Pi\varPi\Rho\Sigma\varSigma\Tau\Upsilon\Phi\varPhi\Chi\Psi\varPsi\Omega}
+
+\newcommand{\testcase}[1]{%
 \ifcsname setmathfont\endcsname%
   \section{#1}%
   \setmathfont{#1}%
 \fi
 \centering%
+%
+\tableofstandstyles{\tsi}%
+\tableofstandstyles{\tsii}%
+\tableofstandstyles{\tsiii}%
+\tableofstandstyles{\tsiv}%
+%
+\tableofextrastyles{\tsi}%
+\tableofextrastyles{\tsii}%
+\tableofextrastyles{\tsiii}%
+\tableofextrastyles{\tsiv}%
+}
+
+\newcommand{\testallchar}[2]{\ifx#2\end\else\\#1#2\expandafter\testallchar\expandafter#1\fi}
+\newcommand{\tableofstandstyles}[1]{%
 \begin{tabular}{cccc|cccc}
   up   &
   it   &
@@ -68,37 +102,59 @@
   sans bfup &
   sans bfit
   %
-  \\\testcase{\sigma}
-  \\\testcase{a}
+  \expandafter\testallchar\expandafter\rowofstandardstyles #1 \end
 \end{tabular}
+}
 
-\ifcsname setmathfont\endcsname%
-\vspace{32pt}
+\newcommand{\tableofextrastyles}[1]{%
 \begin{tabular}{ccccccccc}
   bb   & bbit  &
   scr  & bfscr &
   cal  & bfcal &
   frak & bffrak &
   tt
-  \\\testothers{\sigma}
-  \\\testothers{\Sigma}
-  \\\testothers{a}
-  \\\testothers{A}
+  \expandafter\testallchar\expandafter\rowofotherstyles #1 \end
 \end{tabular}
-\fi%
-\clearpage
 }
 
 \begin{document}
-\testfont{STIX Two Math}
+\ifcsname setmathfont\endcsname\else%
+% missing these symbols in type1
+\newcommand{\omicron}{~}%  o
+\newcommand{\Alpha}{~}%    A
+\newcommand{\Beta}{~}%     B
+\newcommand{\Epsilon}{~}%  E
+\newcommand{\Zeta}{~}%     Z
+\newcommand{\Eta}{~}%      H
+\newcommand{\varTheta}{~}% \Theta
+\newcommand{\Iota}{~}%     I
+\newcommand{\Kappa}{~}%    K
+\newcommand{\Mu}{~}%       M
+\newcommand{\Nu}{~}%       N
+\newcommand{\Omicron}{~}%  O
+\newcommand{\varPhi}{~}%   \Phi
+\newcommand{\varPi}{~}%    \Pi
+\newcommand{\Rho}{~}%      \R
+\newcommand{\varSigma}{~}% \Sigma
+\newcommand{\Tau}{~}%      T
+\newcommand{\Chi}{~}%      X
+\newcommand{\varPsi}{~}%   \Psi
+\fi%
+%
+%
+%
+\renewcommand{\arraystretch}{1.1}
+\testcase{STIX Two Math}
+%
 \ifcsname setmathfont\endcsname%
-\testfont{Asana Math}
-\testfont{TeX Gyre Bonum Math}
-\testfont{TeX Gyre Pagella Math}
-\testfont{TeX Gyre Schola Math}
-\testfont{TeX Gyre Termes Math}
-\testfont{TeX Gyre DejaVu Math}
-\testfont{Latin Modern Math}
-\testfont{Cambria Math}
+\testcase{XITS Math}
+\testcase{Asana Math}
+\testcase{TeX Gyre Bonum Math}
+\testcase{TeX Gyre Pagella Math}
+\testcase{TeX Gyre Schola Math}
+\testcase{TeX Gyre Termes Math}
+\testcase{TeX Gyre DejaVu Math}
+\testcase{Latin Modern Math}
+\testcase{Cambria Math}
 \fi
 \end{document}
