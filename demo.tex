@@ -3,12 +3,12 @@
 
 \usepackage{iftex}%
 \ifPDFTeX%
-  \usepackage{stix2}
+  \usepackage{lmodern}
 \else%
   \usepackage{fontspec}%
   \usepackage{unicode-math}%
-  \setmainfont{Source Sans Pro}%
-  \setsansfont{Source Sans Pro}%
+  \setmainfont{Latin Modern Sans}%
+  \setsansfont{Latin Modern Sans}%
   \unimathsetup{math-style=TeX}
 \fi
 
@@ -120,8 +120,9 @@
 
 \begin{document}
 \title{Comparisons of the Fonts for Unicode Math}
+\date{}
+\author{}
 \maketitle%
-\hfill%
 \tableofcontents%
 \clearpage%
 %
